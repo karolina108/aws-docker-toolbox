@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request
 from redis import Redis, RedisError
 import os
 import socket
@@ -14,11 +14,17 @@ def hello():
         visits = redis.incr("counter")
     except RedisError:
         visits = "<i>Cannot connect to Redis, counter disabled</i>"
+
+    name = request.args.get('name')
+
+    if name == None:
+        name = "unknown"
     
-    html = "<h3>Hello {name}!</h3>" \
+    html = "<h3>Hello {world}!</h3>" \
+        "<p>Your name is {name}.</p>" \
         "<b>Hostname:</b> {hostname}<br/>" \
         "<b>Visits:</b> {visits}"
-    return html.format(name=os.getenv("NAME", "world"), hostname=socket.gethostname(), visits=visits)
+    return html.format(world=os.getenv("NAME", "world"), name=name, hostname=socket.gethostname(), visits=visits)
 
 if __name__=="__main__":
     app.run(host='0.0.0.0', port=80)
