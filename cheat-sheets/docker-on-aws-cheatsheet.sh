@@ -9,3 +9,6 @@ docker tag ${APP_NAME}-${ENV_NAME}:latest ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION
 
 # Push image
 docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${APP_NAME}-${ENV_NAME}:latest
+
+# Run image from ECR
+docker run -p ${HOST_PORT}:${EXPOSED_PORT} ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${APP_NAME}-${ENV_NAME}:latest
